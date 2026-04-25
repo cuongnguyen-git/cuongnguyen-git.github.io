@@ -25,7 +25,7 @@ navLinks.addEventListener('click', e => {
 });
 
 // ── Active nav link on scroll ──────────────────────────────────────────────
-const sections = document.querySelectorAll('section[id]');
+const sections    = document.querySelectorAll('section[id]');
 const allNavLinks = document.querySelectorAll('.nav-link[href^="#"]');
 
 function updateActiveNav() {
@@ -43,11 +43,12 @@ window.addEventListener('scroll', updateActiveNav, { passive: true });
 updateActiveNav();
 
 // ── Scroll reveal ──────────────────────────────────────────────────────────
-const revealTargets = [
+const revealSelectors = [
   '.service-card',
   '.why-item',
   '.testimonial-card',
   '.contact-card',
+  '.contact-form-wrap',
   '.stat',
   '.about-content > p',
   '.section-header',
@@ -55,11 +56,16 @@ const revealTargets = [
   '.about-content',
 ];
 
-revealTargets.forEach(sel => {
+revealSelectors.forEach(sel => {
   document.querySelectorAll(sel).forEach((el, i) => {
     el.classList.add('reveal');
     el.style.transitionDelay = `${i * 80}ms`;
   });
+});
+
+document.querySelectorAll('.process-step').forEach((el, i) => {
+  el.classList.add('reveal');
+  el.style.transitionDelay = `${i * 100}ms`;
 });
 
 const revealObserver = new IntersectionObserver(
@@ -136,6 +142,51 @@ if (typedEl && outputEl) {
   }
 
   setTimeout(runSequence, 800);
+}
+
+// ── Contact form ───────────────────────────────────────────────────────────
+const contactForm    = document.getElementById('contact-form');
+const formSuccess    = document.getElementById('form-success');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name    = contactForm.querySelector('#f-name').value.trim();
+    const email   = contactForm.querySelector('#f-email').value.trim();
+    const message = contactForm.querySelector('#f-message').value.trim();
+
+    if (!name || !email || !message) {
+      const firstEmpty = !name
+        ? contactForm.querySelector('#f-name')
+        : !email
+          ? contactForm.querySelector('#f-email')
+          : contactForm.querySelector('#f-message');
+      firstEmpty.focus();
+      firstEmpty.style.borderColor = '#f87171';
+      setTimeout(() => { firstEmpty.style.borderColor = ''; }, 2000);
+      return;
+    }
+
+    const company = contactForm.querySelector('#f-company').value.trim();
+    const service = contactForm.querySelector('#f-service').value;
+
+    const subject = encodeURIComponent(
+      `[CN Security Enquiry] ${service || 'General Enquiry'} — ${company || name}`
+    );
+    const body = encodeURIComponent(
+      `Name: ${name}\nCompany: ${company || 'N/A'}\nEmail: ${email}\nService: ${service || 'Not specified'}\n\n${message}`
+    );
+
+    window.location.href = `mailto:cnsecconsultingptyltd@gmail.com?subject=${subject}&body=${body}`;
+
+    contactForm.hidden = true;
+    formSuccess.hidden = false;
+  });
+
+  contactForm.querySelectorAll('.form-input, .form-textarea').forEach(el => {
+    el.addEventListener('input', () => { el.style.borderColor = ''; });
+  });
 }
 
 // ── Smooth scroll for anchor links ─────────────────────────────────────────
