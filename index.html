@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CN Security Consulting Pty Ltd — Expert offensive security services in Melbourne. Web application pentesting, network pentesting, red team assessments, and malware development.">
+  <title>CN Security Consulting Pty Ltd | Offensive Security Experts</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header-container">
+      <a href="#home" class="logo-link">
+        <img src="assets/logo.png" alt="CN Security Consulting" class="logo" onerror="this.style.display='none';document.querySelector('.logo-text').style.display='flex'">
+        <span class="logo-text" style="display:none">
+          <span class="logo-bracket">[</span>CN<span class="logo-accent">SEC</span><span class="logo-bracket">]</span>
+        </span>
+      </a>
+      <nav>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#services" class="nav-link">Services</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+          <li><a href="#contact" class="nav-link nav-cta">Get in Touch</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-scan-line"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Melbourne, Australia — Offensive Security
+      </div>
+      <h1 class="hero-title">
+        Identifying Your Weaknesses<br>
+        <span class="accent">Before Attackers Do</span>
+      </h1>
+      <p class="hero-subtitle">
+        Expert-led penetration testing, red team assessments, and offensive security consulting.
+        100% local. No third parties. Real attacker mindset.
+      </p>
+      <div class="hero-certs">
+        <span class="cert-badge">OSCP</span>
+        <span class="cert-badge">OSWE</span>
+        <span class="cert-badge">OSWA</span>
+        <span class="cert-badge">OSWP</span>
+        <span class="cert-badge">CRTP</span>
+        <span class="cert-badge">OSEP</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Request an Engagement</a>
+        <a href="#services" class="btn-ghost">View Services</a>
+      </div>
+    </div>
+    <div class="hero-terminal">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">threat-assessment.sh</span>
+      </div>
+      <div class="terminal-body">
+        <p><span class="t-prompt">$</span> <span class="t-cmd" id="typed-cmd"></span><span class="t-cursor">█</span></p>
+        <div id="terminal-output"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="container stats-grid">
+      <div class="stat">
+        <span class="stat-number">10+</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-number">6</span>
+        <span class="stat-label">Offensive Certs</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Local — Melbourne</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-number">0</span>
+        <span class="stat-label">Third Parties</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services -->
+  <section id="services" class="services-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// what we do</span>
+        <h2>Offensive Security Services</h2>
+        <p>Purpose-built engagements — no cookie-cutter reports, no offshore subcontracting.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+              <path d="M12 8v4l3 3"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <h3>Web Application Pentesting</h3>
+          <p>Manual and automated testing against OWASP Top 10 and beyond — IDOR, authentication flaws, injection, business logic, and API abuse.</p>
+          <ul class="service-points">
+            <li>Black, grey, and white box</li>
+            <li>API &amp; mobile backend testing</li>
+            <li>Authenticated &amp; unauthenticated</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+              <path d="M7 8h10M7 12h6"/>
+            </svg>
+          </div>
+          <h3>Network Pentesting</h3>
+          <p>Internal and external network assessments — identifying misconfigurations, vulnerable services, and lateral movement paths before threat actors do.</p>
+          <ul class="service-points">
+            <li>Internal &amp; external assessments</li>
+            <li>AD / Kerberos attack paths</li>
+            <li>Segmentation validation</li>
+          </ul>
+        </div>
+
+        <div class="service-card service-card--featured">
+          <div class="featured-label">Most Comprehensive</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <h3>Red Team Assessment</h3>
+          <p>Full-scope adversary simulation — testing people, processes, and technology with real-world TTPs mapped to MITRE ATT&CK to measure true detection and response capability.</p>
+          <ul class="service-points">
+            <li>MITRE ATT&amp;CK aligned</li>
+            <li>Physical &amp; social engineering</li>
+            <li>Purple team debrief included</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4l16 16M4 20L20 4"/>
+              <rect x="8" y="8" width="8" height="8" rx="1"/>
+            </svg>
+          </div>
+          <h3>Malware Development</h3>
+          <p>Custom implants and tooling for red team engagements — EDR evasion, C2 staging, and payload development for authorised simulation exercises.</p>
+          <ul class="service-points">
+            <li>EDR/AV evasion techniques</li>
+            <li>Custom C2 payloads</li>
+            <li>Authorised engagements only</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="why-section">
+    <div class="container">
+      <div class="why-grid">
+        <div class="why-content">
+          <span class="section-tag">// why cn security</span>
+          <h2>Built Different</h2>
+          <p>Most security firms outsource work overseas, recycle templated reports, and hand you a PDF. We don't.</p>
+          <div class="why-items">
+            <div class="why-item">
+              <div class="why-check">✓</div>
+              <div>
+                <strong>Real Attacker Mindset</strong>
+                <p>Over a decade emulating threat actors — not checkbox compliance audits.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="why-check">✓</div>
+              <div>
+                <strong>Highly Certified Expertise</strong>
+                <p>OSCP, OSWE, OSWA, OSWP, CRTP, OSEP — hands-on offensive certifications that require you to actually hack, not just study.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="why-check">✓</div>
+              <div>
+                <strong>Melbourne-Based &amp; 100% Local</strong>
+                <p>All work performed in Melbourne. Your data stays in Australia. No offshore subcontracting, ever.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="why-check">✓</div>
+              <div>
+                <strong>Custom Engagements</strong>
+                <p>Every assessment is scoped to your environment, your risks, and your threat model.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="why-visual">
+          <div class="threat-model">
+            <div class="threat-model-title">Engagement Scope</div>
+            <div class="threat-layers">
+              <div class="layer layer-1">
+                <span class="layer-label">People</span>
+                <div class="layer-bar"><div class="layer-fill" style="width: 72%"></div></div>
+              </div>
+              <div class="layer layer-2">
+                <span class="layer-label">Process</span>
+                <div class="layer-bar"><div class="layer-fill" style="width: 85%"></div></div>
+              </div>
+              <div class="layer layer-3">
+                <span class="layer-label">Technology</span>
+                <div class="layer-bar"><div class="layer-fill" style="width: 94%"></div></div>
+              </div>
+            </div>
+            <div class="threat-tags">
+              <span>MITRE ATT&amp;CK</span>
+              <span>PTES</span>
+              <span>OWASP</span>
+              <span>NIST</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="about-section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-photo-col">
+          <div class="about-photo-frame">
+            <div class="about-photo-placeholder">
+              <svg viewBox="0 0 80 80" fill="none">
+                <circle cx="40" cy="30" r="18" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10 72c0-16.57 13.43-30 30-30s30 13.43 30 30" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <span>Cuong Nguyen</span>
+            </div>
+          </div>
+          <div class="cert-grid">
+            <div class="cert-item">OSCP</div>
+            <div class="cert-item">OSWE</div>
+            <div class="cert-item">OSWA</div>
+            <div class="cert-item">OSWP</div>
+            <div class="cert-item">CRTP</div>
+            <div class="cert-item">OSEP</div>
+          </div>
+        </div>
+        <div class="about-content">
+          <span class="section-tag">// about</span>
+          <h2>Cuong Nguyen</h2>
+          <p class="about-title">Principal Security Consultant — OSCP | OSWE | OSWA | OSWP | CRTP | OSEP</p>
+          <p>I'm a cybersecurity professional with over a decade of experience in offensive security operations. I emulate real-world threat actors' TTPs to expose gaps across people, processes, and infrastructure.</p>
+          <p>I collaborate closely with in-house security teams — not just to find vulnerabilities, but to help them build better defenses through mitigations, purple teaming, and actionable reporting. I also provide second-line oversight to support cybersecurity and fraud prevention efforts.</p>
+          <p>CN Security Consulting Pty Ltd was founded to deliver genuinely expert offensive security services — without the overhead, outsourcing, or templated outputs of larger firms.</p>
+          <div class="about-details">
+            <div class="about-detail">
+              <span class="detail-label">Location</span>
+              <span>Melbourne, VIC, Australia</span>
+            </div>
+            <div class="about-detail">
+              <span class="detail-label">ABN</span>
+              <span>90 706 059 463</span>
+            </div>
+            <div class="about-detail">
+              <span class="detail-label">Focus</span>
+              <span>Offensive Security &amp; Red Teaming</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// testimonials</span>
+        <h2>What Clients Say</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p>Abound Communities was delighted to have Cuong from CN Security Consulting review our information security requirements. His professionalism and attention to detail was exceptional. We would gladly recommend CN Security Consulting for your technology security needs.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">KL</div>
+            <div>
+              <strong>Kathryn Lewis</strong>
+              <span>Executive Assistant to CEO, Abound Communities</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// contact</span>
+        <h2>Start a Conversation</h2>
+        <p>Ready to understand your real security posture? Get in touch to discuss an engagement.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact-label">Location</span>
+            <span class="contact-value">Melbourne, VIC, Australia</span>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.07 12a19.79 19.79 0 01-3.07-8.67A2 2 0 013 1.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2z"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact-label">Phone</span>
+            <a href="tel:0422662044" class="contact-value">0422 662 044</a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact-label">Email</span>
+            <a href="mailto:cnsecconsultingptyltd@gmail.com" class="contact-value">cnsecconsultingptyltd@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact-label">Operating Hours</span>
+            <span class="contact-value">Mon–Fri: 17:00–22:00</span>
+            <span class="contact-value">Sat–Sun: 08:00–12:00</span>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="7" width="20" height="14" rx="2"/>
+              <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact-label">ABN</span>
+            <span class="contact-value">90 706 059 463</span>
+          </div>
+        </div>
+      </div>
+      <div class="contact-cta">
+        <a href="mailto:cnsecconsultingptyltd@gmail.com" class="btn-primary btn-large">Send an Enquiry</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-bracket">[</span>CN<span class="logo-accent">SEC</span><span class="logo-bracket">]</span>
+        <span>CN Security Consulting Pty Ltd</span>
+      </div>
+      <p class="footer-copy">© 2025 CN Security Consulting Pty Ltd. All rights reserved. ABN 90 706 059 463</p>
+      <nav class="footer-nav">
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
