@@ -1,0 +1,124 @@
+:root {
+    --fg: #c5c8c6;
+    --dim: #707880;
+    --bg: #1d1f21;
+    --accent: #b5bd68;
+    --prompt: #81a2be;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "SF Mono", "Menlo", "Monaco", "Consolas", "Courier New", monospace;
+    max-width: 720px;
+    margin: 3em auto;
+    padding: 0 1.5em;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+h1 {
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    color: var(--accent);
+}
+
+h1::before {
+    content: "$ ";
+    color: var(--prompt);
+}
+
+h2 {
+    font-size: 1em;
+    font-weight: normal;
+    color: var(--accent);
+    margin: 0 0 0.5em 0;
+}
+
+h2::before {
+    content: "# ";
+    color: var(--dim);
+}
+
+.tagline {
+    color: var(--dim);
+    margin: 0 0 2.5em 0;
+}
+
+.tagline::before {
+    content: "// ";
+}
+
+section {
+    margin-bottom: 2em;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li::before {
+    content: "- ";
+    color: var(--dim);
+}
+
+p {
+    margin: 0 0 0.8em 0;
+}
+
+.quote {
+    color: var(--fg);
+    border-left: 2px solid var(--dim);
+    padding-left: 1em;
+    margin-left: 0;
+}
+
+.cite {
+    color: var(--dim);
+}
+
+.cite::before {
+    content: "-- ";
+}
+
+.hours {
+    color: var(--dim);
+}
+
+a {
+    color: var(--prompt);
+    text-decoration: underline;
+    text-decoration-color: var(--dim);
+}
+
+a:hover {
+    text-decoration-color: var(--prompt);
+}
+
+footer {
+    margin-top: 3em;
+    padding-top: 1em;
+    border-top: 1px dashed var(--dim);
+    color: var(--dim);
+    font-size: 0.9em;
+}
+
+footer::before {
+    content: "[ ";
+}
+
+footer::after {
+    content: " ]";
+}
+
+::selection {
+    background: var(--accent);
+    color: var(--bg);
+}
