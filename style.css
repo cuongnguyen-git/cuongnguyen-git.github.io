@@ -158,7 +158,7 @@ footer {
 /* === top nav === */
 
 .topnav {
-    margin: 0 0 2.5em 0;
+    margin: 0.8em 0 2.5em 0;
     font-size: 0.95em;
 }
 
@@ -205,22 +205,5 @@ footer {
 .post-list .post-desc {
     color: var(--dim);
     margin: 0.2em 0 0 0;
-    font-size: 0.95em;
-}
-
-/* === detail list (services, process) === */
-
-.detail-list {
-    margin: 0;
-    padding-left: 1.4em;
-}
-
-.detail-list li {
-    margin-bottom: 1em;
-}
-
-.detail-list .desc {
-    display: block;
-    color: var(--dim);
     font-size: 0.95em;
 }
