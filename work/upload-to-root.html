@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A public upload endpoint trusted the multipart filename, turning one request into full root compromise.">
+<meta name="theme-color" content="#d7d7d1">
+<meta property="og:title" content="Unauthenticated Arbitrary File Write Leading to Root Compromise · CN Security Consulting">
+<meta property="og:description" content="A public upload endpoint trusted the multipart filename, turning one request into full root compromise.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cnsecurity.com.au/work/upload-to-root.html">
+<meta property="og:image" content="https://cnsecurity.com.au/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<title>Unauthenticated Arbitrary File Write Leading to Root Compromise · CN Security Consulting</title>
+<link rel="canonical" href="https://cnsecurity.com.au/work/upload-to-root.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="site-frame">
+
+<header class="site-header">
+    <div class="wrap">
+        <a class="brand" href="/" aria-label="CN Security Consulting, home">
+            <span class="brand-mark" aria-hidden="true">CN</span>
+            <span class="brand-name">CN Security<small>Melbourne, Australia</small></span>
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="/#info">Info</a>
+            <a href="/#disclosures">Bug Bounty</a>
+            <a href="/#services">Services</a>
+            <a href="/testimonials/">Testimonials</a>
+            <a class="nav-contact" href="/#contact">Contact <span aria-hidden="true">↗</span></a>
+        </nav>
+    </div>
+</header>
+
+<main id="main" class="article-page">
+    <div class="wrap">
+        <header class="article-header">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">cn-security</a><span class="sep">/</span><a href="/#disclosures">disclosures</a><span class="sep">/</span><span>03</span>
+            </nav>
+            <p class="article-kicker">Case study 03 / 2026</p>
+            <h1>Unauthenticated Arbitrary File Write Leading to Root Compromise</h1>
+            <p class="article-lede">A public upload endpoint trusted the multipart filename, turning one request into full root compromise.</p>
+            <dl class="article-meta">
+                <div><dt>Type</dt><dd>Path traversal</dd></div>
+                <div><dt>Sector</dt><dd>Education</dd></div>
+                <div><dt>Reported</dt><dd>Critical</dd></div>
+                <div><dt>Year</dt><dd>2026</dd></div>
+            </dl>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-side">
+                <p class="side-label">On this page</p>
+                <nav class="toc" aria-label="On this page">
+                    <ul>
+                    <li><a href="#s1">Summary</a></li>
+                    <li><a href="#s2">Discovery</a></li>
+                    <li><a href="#s3">Confirming Arbitrary File Write</a></li>
+                    <li><a href="#s4">Escalation to System Access</a></li>
+                    <li><a href="#s5">Privilege Escalation</a></li>
+                    <li><a href="#s6">Root Cause</a></li>
+                    <li><a href="#s7">Remediation</a></li>
+                    <li><a href="#s8">Conclusion</a></li>
+                    </ul>
+                </nav>
+                <a class="side-back" href="/#disclosures">← All disclosures</a>
+            </aside>
+
+            <article class="article-body">
+<section>
+<h2 id="s1">Summary</h2>
+<p>This assessment identified a vulnerability chain that allowed an unauthenticated attacker to obtain root access to a Linux host through a publicly accessible file upload endpoint.</p>
+
+<p>The issue originated from unsafe handling of multipart filenames during file uploads. By controlling the filename parameter supplied in the upload request, it was possible to write attacker-controlled content outside the intended upload directory.</p>
+
+<p>Combined with a deployment configuration where the application ran under a privileged Linux user account with SSH access and passwordless sudo privileges, the vulnerability resulted in full host compromise.</p>
+
+<p>The affected organisation, hostnames, and implementation details have been redacted to prevent reproduction against the remediated environment.</p>
+</section>
+
+<section>
+<h2 id="s2">Discovery</h2>
+<p>During reconnaissance, a publicly accessible Python-based web application exposed a file upload feature that accepted unauthenticated submissions.</p>
+
+<p>The application allowed users to upload files through a multipart form and subsequently processed the uploaded content. Initial testing focused on validating whether uploaded files were being written to disk using user-controlled filename values.</p>
+
+<p>The upload functionality accepted arbitrary filenames and did not appear to perform path validation or sanitisation.</p>
+</section>
+
+<section>
+<h2 id="s3">Confirming Arbitrary File Write</h2>
+<p>Testing showed that the server trusted the filename field supplied within the multipart request and used this value when determining the destination path for uploaded content.</p>
+
+<p>By supplying path traversal sequences within the filename, it was possible to influence where files were written on the underlying filesystem.</p>
+
+<p>Application responses indicated that uploaded files were successfully written and subsequently processed by the backend application. Error conditions occurred during post-upload parsing rather than during file creation, confirming that the file write operation itself had succeeded.</p>
+
+<p>Additional validation demonstrated that files could be written outside the intended upload directory, resulting in an arbitrary file write primitive.</p>
+</section>
+
+<section>
+<h2 id="s4">Escalation to System Access</h2>
+<p>Once arbitrary file write had been established, the next objective was determining whether a writable location existed that could be leveraged to obtain execution or system-level access.</p>
+
+<p>The application was running under a standard Linux user account rather than a dedicated low-privilege service account. The user owned a home directory with an accessible SSH configuration.</p>
+
+<p>By writing an SSH public key into the user’s authorized keys configuration, it was possible to authenticate as that user over SSH.</p>
+
+<p>This converted the file write vulnerability into interactive access on the target host.</p>
+</section>
+
+<section>
+<h2 id="s5">Privilege Escalation</h2>
+<p>Following successful SSH access, local permissions were reviewed.</p>
+
+<p>The application user was a member of the sudo group and had been granted passwordless sudo privileges. As a result, elevation to root required no additional exploitation.</p>
+
+<p>The complete attack chain was therefore:</p>
+
+<p class="code-label">Plain Text</p>
+<pre><code>Unauthenticated file upload
+↓
+Path traversal in multipart filename
+↓
+Arbitrary file write
+↓
+Modification of SSH authorized_keys
+↓
+SSH access as application user
+↓
+Passwordless sudo
+↓
+Root access</code></pre>
+
+<p>The overall impact was full compromise of the underlying host from a single unauthenticated entry point.</p>
+</section>
+
+<section>
+<h2 id="s6">Root Cause</h2>
+<p>The primary vulnerability was unsafe handling of user-supplied filenames during file uploads.</p>
+
+<p>The application used the multipart filename value directly when constructing filesystem paths and did not adequately validate or restrict the resulting location.</p>
+
+<p>As a result, attacker-controlled input influenced both:</p>
+
+<ul>
+<li>The contents written to disk.</li>
+<li>The destination path where those contents were written.</li>
+</ul>
+
+<p>The vulnerability was compounded by architectural decisions within the deployment environment:</p>
+
+<ul>
+<li>The application ran under a real user account rather than a dedicated service account.</li>
+<li>The user account had a writable SSH configuration.</li>
+<li>The user possessed passwordless sudo privileges.</li>
+</ul>
+
+<p>Any one of these issues alone would have increased risk. Combined with the arbitrary file write vulnerability, they resulted in complete host compromise.</p>
+</section>
+
+<section>
+<h2 id="s7">Remediation</h2>
+<p>The following remediations were recommended:</p>
+
+<ul>
+<li>Sanitize uploaded filenames using framework-provided validation functions such as <code>secure_filename()</code>.</li>
+<li>Validate resolved filesystem paths and ensure uploads cannot escape the intended directory structure.</li>
+<li>Run web applications using dedicated, low-privilege service accounts.</li>
+<li>Prevent service accounts from maintaining interactive SSH access where unnecessary.</li>
+<li>Remove passwordless sudo privileges from application service accounts.</li>
+<li>Review similar upload functionality throughout the application for equivalent path traversal vulnerabilities.</li>
+</ul>
+</section>
+
+<section>
+<h2 id="s8">Conclusion</h2>
+<p>This issue demonstrates how relatively common weaknesses can combine into a critical security vulnerability.</p>
+
+<p>The initial bug was an arbitrary file write caused by unsafe handling of multipart filenames. On its own, this represented a serious security issue. However, the surrounding deployment configuration transformed that primitive into complete system compromise.</p>
+
+<p>An unauthenticated attacker could leverage a single upload request to gain access as the application user and then elevate directly to root through existing sudo privileges, resulting in full control of the underlying host.</p>
+</section>
+            </article>
+        </div>
+
+        <nav class="article-nav" aria-label="Article navigation">
+            <a href="/#disclosures">← All disclosures</a>
+            <a class="next" href="#main">Back to top ↑</a>
+        </nav>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">
+        <span>CN Security Consulting Pty Ltd · ABN 90 706 059 463</span>
+        <a href="/">Back to index ↑</a>
+    </div>
+</footer>
+
+</div>
+
+</body>
+</html>

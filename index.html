@@ -3,16 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Melbourne-based offensive security consulting, specialising in web application penetration testing, network testing and red team assessments.">
-<meta name="theme-color" content="#ffffff">
-<meta property="og:title" content="CN Security Consulting PTY LTD">
-<meta property="og:description" content="Practical, adversary-led security testing for Australian organisations.">
+<meta name="description" content="CN Security Consulting is an independent offensive security consultancy in Melbourne. Penetration testing, red team assessments and custom tooling for Australian organisations.">
+<meta name="theme-color" content="#d7d7d1">
+<meta property="og:title" content="CN Security Consulting · Offensive security, Melbourne">
+<meta property="og:description" content="Penetration testing, red team work and custom tooling for Australian organisations.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cnsecurity.com.au/">
-<meta property="og:image" content="https://cnsecurity.com.au/assets/logo2.png">
-<title>CN Security Consulting PTY LTD</title>
+<meta property="og:image" content="https://cnsecurity.com.au/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<title>CN Security Consulting · Offensive security, Melbourne</title>
 <link rel="canonical" href="https://cnsecurity.com.au/">
-<link rel="stylesheet" href="style.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -33,49 +37,173 @@
 </head>
 <body>
 
-<h1>CN Security Consulting PTY LTD</h1>
-<nav class="topnav">
-    <a href="/testimonials/">Testimonials</a>
-</nav>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<section>
-    <p>
-        We are an Australian based cyber security consulting company, specialising in offensive security, with an emphasis on red teaming engagements that simulate real world attack scenarios. We offer tailored assessments, custom malware development, and network and web application penetration testing.
-    </p>
-</section>
+<div class="site-frame">
 
-<section>
-    <h2>Certifications</h2>
-    <p>OSCP &middot; OSEP &middot; OSWE &middot; OSWA &middot; OSWP &middot; CRTP</p>
-</section>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="/" aria-label="CN Security Consulting, home">
+                <span class="brand-mark" aria-hidden="true">CN</span>
+                <span class="brand-name">CN Security<small>Melbourne, Australia</small></span>
+            </a>
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="#info">Info</a>
+                <a href="#disclosures">Bug Bounty</a>
+                <a href="#services">Services</a>
+                <a href="/testimonials/">Testimonials</a>
+                <a class="nav-contact" href="#contact">Contact <span aria-hidden="true">↗</span></a>
+            </nav>
+        </div>
+    </header>
 
-<section>
-    <h2>Services</h2>
-    <ul>
-        <li>Web Application Penetration Testing</li>
-        <li>Network Penetration Testing</li>
-        <li>Red Team Assessment</li>
-        <li>Malware Development</li>
-        <li>AI Penetration Testing</li>
-    </ul>
-</section>
+    <main id="main">
 
-<section>
-    <h2>Contact</h2>
-    <p>
-        <a href="mailto:cnsecconsultingptyltd@gmail.com">cnsecconsultingptyltd@gmail.com</a><br>
-        0422 662 044<br>
-        Melbourne, VIC, Australia
-    </p>
-    <p class="hours">
-        Mon&ndash;Fri 17:00&ndash;22:00 AEST<br>
-        Sat&ndash;Sun 08:00&ndash;12:00 AEST
-    </p>
-</section>
+        <section class="info" id="info">
+            <div class="wrap">
+                <div class="section-top">
+                    <span>01 / Info</span>
+                    <span>Melbourne, Australia</span>
+                    <span>2026</span>
+                </div>
 
-<footer>
-    CN Security Consulting Pty Ltd &middot; ABN 90 706 059 463
-</footer>
+                <div class="info-grid">
+                    <div class="info-main">
+                        <h1 class="info-hello">Hello, I’m Cuong.</h1>
+                        <p class="info-lede">I run CN Security, an Australian-based cyber security consulting company specialising in offensive security, with an emphasis on red teaming engagements that simulate real-world attack scenarios. I offer tailored assessments, custom malware development, and network and web application penetration testing.</p>
+                        <p class="info-note">You deal with me from the first call to the final report. No hand-offs.</p>
+                    </div>
+
+                    <dl class="info-meta">
+                        <div><dt>Based</dt><dd>Melbourne, VIC</dd></div>
+                        <div><dt>Certifications</dt><dd>OSCP · OSEP · OSWE · OSWA · OSWP · CRTP</dd></div>
+                    </dl>
+                </div>
+
+                <blockquote class="quote">
+                    <span class="quote-label">Client note / 01</span>
+                    <div>
+                        <p>“Abound Communities was delighted to have Cuong from CN Security Consulting review our information security requirements. His professionalism and attention to detail was exceptional. We would gladly recommend CN Security Consulting for your technology security needs.”</p>
+                        <footer>Kathryn Lewis, Executive Assistant to CEO, Abound Communities</footer>
+                    </div>
+                </blockquote>
+            </div>
+        </section>
+
+        <section class="section" id="disclosures">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2><span class="section-num">02</span> Public disclosures</h2>
+                    <span class="section-aside">Three disclosures / 2026</span>
+                </div>
+
+                <ol class="work-list">
+                    <li>
+                        <a class="work-row" href="/work/esim-idor.html">
+                            <span class="work-no">01</span>
+                            <span class="work-main">
+                                <span class="work-title">A stranger’s eSIM</span>
+                                <span class="work-desc">An unauthenticated IDOR in a mobile provisioning API.</span>
+                            </span>
+                            <span class="work-tag">IDOR / Telecom</span>
+                            <span class="work-year">2026</span>
+                            <span class="work-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="work-row" href="/work/advertiser-directory.html">
+                            <span class="work-no">02</span>
+                            <span class="work-main">
+                                <span class="work-title">Every advertiser’s address</span>
+                                <span class="work-desc">A missing role check on a self-serve advertising platform.</span>
+                            </span>
+                            <span class="work-tag">Access control / Advertising</span>
+                            <span class="work-year">2026</span>
+                            <span class="work-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="work-row" href="/work/upload-to-root.html">
+                            <span class="work-no">03</span>
+                            <span class="work-main">
+                                <span class="work-title">Twelve minutes to root</span>
+                                <span class="work-desc">A multipart filename, a path traversal and a root shell.</span>
+                            </span>
+                            <span class="work-tag">Path traversal / Education</span>
+                            <span class="work-year">2026</span>
+                            <span class="work-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section" id="services">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2><span class="section-num">03</span> Services</h2>
+                </div>
+
+                <ul class="service-list">
+                    <li class="service-row">
+                        <span class="service-num">01</span>
+                        <h3>Web Application</h3>
+                        <p>Identify and fix security weaknesses in web applications before they become business risks.</p>
+                    </li>
+                    <li class="service-row">
+                        <span class="service-num">02</span>
+                        <h3>Network Pentesting</h3>
+                        <p>Assess internal and external networks to uncover vulnerabilities and improve security.</p>
+                    </li>
+                    <li class="service-row">
+                        <span class="service-num">03</span>
+                        <h3>Red Team Emulation</h3>
+                        <p>Simulate real-world attacks to test your organization’s defenses and response capabilities.</p>
+                    </li>
+                    <li class="service-row">
+                        <span class="service-num">04</span>
+                        <h3>Custom Tooling</h3>
+                        <p>Build tailored security tools and automation designed for your unique environment.</p>
+                    </li>
+                    <li class="service-row">
+                        <span class="service-num">05</span>
+                        <h3>AI Pentesting</h3>
+                        <p>Evaluate AI systems and LLM applications for security risks, misuse, and data exposure.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="wrap">
+                <div class="section-top">
+                    <span>04 / Contact</span>
+                </div>
+
+                <h2>Let’s talk<span class="period">.</span></h2>
+
+                <div class="contact-grid">
+                    <p>Whether you’re looking to validate your security posture, test your defenses, or secure modern applications, let’s talk about how I can help.</p>
+                    <div class="contact-details">
+                        <a class="contact-email" href="mailto:cnsecconsultingptyltd@gmail.com">cnsecconsultingptyltd@gmail.com <span aria-hidden="true">↗</span></a>
+                        <p><a href="tel:+61422662044">0422 662 044</a><br>
+                        Mon–Fri 17:00–22:00 AEST<br>
+                        Sat–Sun 08:00–12:00 AEST</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <span>CN Security Consulting Pty Ltd · ABN 90 706 059 463</span>
+            <a href="#info">Back to top ↑</a>
+        </div>
+    </footer>
+
+</div>
 
 </body>
 </html>

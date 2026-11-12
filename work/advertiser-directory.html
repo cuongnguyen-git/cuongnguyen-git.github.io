@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A broken access control flaw let any authenticated user read the platform-wide advertiser directory.">
+<meta name="theme-color" content="#d7d7d1">
+<meta property="og:title" content="Authenticated Access to Platform-Wide Advertiser Directory · CN Security Consulting">
+<meta property="og:description" content="A broken access control flaw let any authenticated user read the platform-wide advertiser directory.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cnsecurity.com.au/work/advertiser-directory.html">
+<meta property="og:image" content="https://cnsecurity.com.au/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<title>Authenticated Access to Platform-Wide Advertiser Directory · CN Security Consulting</title>
+<link rel="canonical" href="https://cnsecurity.com.au/work/advertiser-directory.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="site-frame">
+
+<header class="site-header">
+    <div class="wrap">
+        <a class="brand" href="/" aria-label="CN Security Consulting, home">
+            <span class="brand-mark" aria-hidden="true">CN</span>
+            <span class="brand-name">CN Security<small>Melbourne, Australia</small></span>
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="/#info">Info</a>
+            <a href="/#disclosures">Bug Bounty</a>
+            <a href="/#services">Services</a>
+            <a href="/testimonials/">Testimonials</a>
+            <a class="nav-contact" href="/#contact">Contact <span aria-hidden="true">↗</span></a>
+        </nav>
+    </div>
+</header>
+
+<main id="main" class="article-page">
+    <div class="wrap">
+        <header class="article-header">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">cn-security</a><span class="sep">/</span><a href="/#disclosures">disclosures</a><span class="sep">/</span><span>02</span>
+            </nav>
+            <p class="article-kicker">Case study 02 / 2026</p>
+            <h1>Authenticated Access to Platform-Wide Advertiser Directory</h1>
+            <p class="article-lede">A broken access control flaw let any authenticated user read the platform-wide advertiser directory.</p>
+            <dl class="article-meta">
+                <div><dt>Type</dt><dd>Broken access control</dd></div>
+                <div><dt>Sector</dt><dd>Advertising</dd></div>
+                <div><dt>Reported</dt><dd>P3</dd></div>
+                <div><dt>Year</dt><dd>2026</dd></div>
+            </dl>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-side">
+                <p class="side-label">On this page</p>
+                <nav class="toc" aria-label="On this page">
+                    <ul>
+                    <li><a href="#s1">Summary</a></li>
+                    <li><a href="#s2">Discovery</a></li>
+                    <li><a href="#s3">Confirming the Exposure</a></li>
+                    <li><a href="#s4">Impact</a></li>
+                    <li><a href="#s5">Root Cause</a></li>
+                    <li><a href="#s6">Remediation</a></li>
+                    <li><a href="#s7">Conclusion</a></li>
+                    </ul>
+                </nav>
+                <a class="side-back" href="/#disclosures">← All disclosures</a>
+            </aside>
+
+            <article class="article-body">
+<section>
+<h2 id="s1">Summary</h2>
+<p>A broken access control vulnerability in a self-service advertising platform allowed any authenticated user to access the platform’s entire advertiser directory through a paginated listing endpoint.</p>
+
+<p>A newly registered account in an “Awaiting Approval” state could browse 72 pages of advertiser records and view information belonging to every advertiser on the platform. At the time of testing, more than 1,400 records were exposed.</p>
+
+<p>The issue was caused by missing authorization controls on a listing action that returned all advertiser records rather than restricting results based on user permissions or ownership.</p>
+
+<p>The platform, hostnames, and identifiers have been redacted. Technical details have been adjusted where necessary to prevent reproduction against the live environment.</p>
+</section>
+
+<section>
+<h2 id="s2">Discovery</h2>
+<p>The target was a legacy CakePHP application exposed within a large wildcard scope.</p>
+
+<p>Registration was open and required only email verification. After creating an account, I was assigned the lowest available privilege level, with an account status of “Awaiting Approval.”</p>
+
+<p>During authenticated testing, an advertiser-related endpoint was identified:</p>
+
+<p class="code-label">Plain Text</p>
+<pre><code>GET /advertisers/index</code></pre>
+
+<p>The endpoint name suggested a standard CakePHP listing action, making it a suitable candidate for access control testing.</p>
+</section>
+
+<section>
+<h2 id="s3">Confirming the Exposure</h2>
+<p>Accessing the endpoint while authenticated returned a paginated HTML table containing advertiser records.</p>
+
+<p class="code-label">Plain Text</p>
+<pre><code>GET /advertisers/index</code></pre>
+
+<p>The response returned HTTP 200 and displayed 20 records per page. Pagination extended across 72 pages, exposing the full advertiser dataset.</p>
+
+<p>Each record contained information including:</p>
+
+<ul>
+<li>Advertiser ID</li>
+<li>Internal user ID</li>
+<li>Business category</li>
+<li>Full name</li>
+<li>Street address</li>
+<li>Suburb, state, and postcode</li>
+<li>Account creation timestamps</li>
+</ul>
+
+<p>To verify that the data originated from the production dataset, I located my own advertiser record. The account I had created only minutes earlier appeared on the final page of results, positioned after all existing advertisers.</p>
+
+<p>Unauthenticated requests to the same endpoint were redirected to the login page, indicating that the application considered the data private but failed to enforce authorization once a user obtained any valid session.</p>
+</section>
+
+<section>
+<h2 id="s4">Impact</h2>
+<p>The vulnerability exposed advertiser information that was intended for platform use and not publicly available through normal application functionality.</p>
+
+<p>While reviewing records, I identified several examples demonstrating the sensitivity of the exposed data:</p>
+
+<ul>
+<li>A sole-trader advertiser whose personal Gmail address had been entered into a postcode field, exposing information not publicly associated with the business listing.</li>
+<li>An internal staff test account containing a corporate email address visible to any authenticated platform user.</li>
+</ul>
+
+<p>The primary issue was not a single exposed record but the scale of the disclosure. Any approved or unapproved user could enumerate the directory and access information belonging to all advertisers on the platform.</p>
+
+<p>Testing confirmed a read-only access control issue. No evidence of modification, deletion, or administrative functionality was identified through the affected endpoint.</p>
+
+<p>Given the ease of exploitation, the low privileges required, and the volume of exposed information, the issue was reported as a broken access control vulnerability affecting the confidentiality of advertiser data.</p>
+</section>
+
+<section>
+<h2 id="s5">Root Cause</h2>
+<p>The affected listing action returned platform-wide advertiser records without validating whether the requesting user was authorized to view them.</p>
+
+<p>Conceptually, the logic resembled:</p>
+
+<p class="code-label">PHP</p>
+<pre><code>$advertisers = $this-&gt;paginate();</code></pre>
+
+<p>Because the query was not scoped to the current user and the action lacked a role check, any authenticated session could access the full dataset.</p>
+
+<p>The vulnerability was caused by missing authorization controls rather than by the pagination mechanism itself.</p>
+</section>
+
+<section>
+<h2 id="s6">Remediation</h2>
+<p>The following remediations were recommended:</p>
+
+<ul>
+<li>Restrict access to the endpoint based on role requirements.</li>
+<li>Scope advertiser listings to records owned by the authenticated user where applicable.</li>
+<li>Apply authorization checks at the controller level rather than relying solely on authentication.</li>
+<li>Review similar scaffolded listing actions throughout the application for equivalent access control issues.</li>
+</ul>
+</section>
+
+<section>
+<h2 id="s7">Conclusion</h2>
+<p>This issue resulted from a missing authorization check on a standard listing endpoint. Any authenticated user, including newly registered accounts awaiting approval, could access the platform’s complete advertiser directory.</p>
+
+<p>Although the vulnerability did not provide modification capabilities, it exposed platform-wide advertiser data, including names, addresses, internal identifiers, and other user-supplied information. The combination of broad data exposure, low attack complexity, and lack of privilege requirements made the issue a clear broken access control finding.</p>
+</section>
+            </article>
+        </div>
+
+        <nav class="article-nav" aria-label="Article navigation">
+            <a href="/#disclosures">← All disclosures</a>
+            <a class="next" href="/work/upload-to-root.html">Next: Twelve minutes to root →</a>
+        </nav>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">
+        <span>CN Security Consulting Pty Ltd · ABN 90 706 059 463</span>
+        <a href="/">Back to index ↑</a>
+    </div>
+</footer>
+
+</div>
+
+</body>
+</html>

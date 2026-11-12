@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An unauthenticated authorization flaw in a mobile provisioning inventory API exposed SIM records and eSIM activation QR codes.">
+<meta name="theme-color" content="#d7d7d1">
+<meta property="og:title" content="Unauthenticated Access to eSIM Activation Credentials via Inventory API IDOR · CN Security Consulting">
+<meta property="og:description" content="An unauthenticated authorization flaw in a mobile provisioning inventory API exposed SIM records and eSIM activation QR codes.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cnsecurity.com.au/work/esim-idor.html">
+<meta property="og:image" content="https://cnsecurity.com.au/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<title>Unauthenticated Access to eSIM Activation Credentials via Inventory API IDOR · CN Security Consulting</title>
+<link rel="canonical" href="https://cnsecurity.com.au/work/esim-idor.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="site-frame">
+
+<header class="site-header">
+    <div class="wrap">
+        <a class="brand" href="/" aria-label="CN Security Consulting, home">
+            <span class="brand-mark" aria-hidden="true">CN</span>
+            <span class="brand-name">CN Security<small>Melbourne, Australia</small></span>
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="/#info">Info</a>
+            <a href="/#disclosures">Bug Bounty</a>
+            <a href="/#services">Services</a>
+            <a href="/testimonials/">Testimonials</a>
+            <a class="nav-contact" href="/#contact">Contact <span aria-hidden="true">↗</span></a>
+        </nav>
+    </div>
+</header>
+
+<main id="main" class="article-page">
+    <div class="wrap">
+        <header class="article-header">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">cn-security</a><span class="sep">/</span><a href="/#disclosures">disclosures</a><span class="sep">/</span><span>01</span>
+            </nav>
+            <p class="article-kicker">Case study 01 / 2026</p>
+            <h1>Unauthenticated Access to eSIM Activation Credentials via Inventory API IDOR</h1>
+            <p class="article-lede">An unauthenticated authorization flaw in a mobile provisioning inventory API exposed SIM records and eSIM activation QR codes.</p>
+            <dl class="article-meta">
+                <div><dt>Type</dt><dd>IDOR</dd></div>
+                <div><dt>Sector</dt><dd>Telecom</dd></div>
+                <div><dt>Reported</dt><dd>High</dd></div>
+                <div><dt>Year</dt><dd>2026</dd></div>
+            </dl>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-side">
+                <p class="side-label">On this page</p>
+                <nav class="toc" aria-label="On this page">
+                    <ul>
+                    <li><a href="#s1">Summary</a></li>
+                    <li><a href="#s2">Discovery</a></li>
+                    <li><a href="#s3">Confirming the Exposure</a></li>
+                    <li><a href="#s4">Impact Assessment</a></li>
+                    <li><a href="#s5">Root Cause</a></li>
+                    <li><a href="#s6">Remediation</a></li>
+                    <li><a href="#s7">Conclusion</a></li>
+                    </ul>
+                </nav>
+                <a class="side-back" href="/#disclosures">← All disclosures</a>
+            </aside>
+
+            <article class="article-body">
+<section>
+<h2 id="s1">Summary</h2>
+<p>This assessment identified an unauthenticated authorization flaw in the inventory API of a mobile provisioning platform. Two internet-accessible endpoints exposed SIM inventory records and associated eSIM activation QR codes without requiring authentication.</p>
+
+<p>By enumerating sequential record identifiers, an attacker could retrieve SIM metadata belonging to other customers and obtain QR codes containing GSMA LPA activation strings. These strings included both the SM-DP+ endpoint and Matching ID used during eSIM profile provisioning.</p>
+
+<p>The issue was ultimately caused by missing authorization checks on object retrieval endpoints. While the vulnerability itself was a straightforward IDOR, the exposed data included activation credentials rather than inventory metadata alone, significantly increasing the impact.</p>
+
+<p>The vendor and target environment have been redacted. Technical details have been adjusted where necessary to prevent reproduction against the remediated service.</p>
+</section>
+
+<section>
+<h2 id="s2">Discovery</h2>
+<p>The target was part of a large wildcard scope containing several thousand internet-facing assets. Initial reconnaissance focused on identifying services likely to support internal operations rather than public users.</p>
+
+<p>One hostname containing inventory-related terminology exposed a small JSON API over HTTPS. Requests to several endpoints returned structured data without requiring authentication, API keys, or session cookies.</p>
+
+<p>At this stage there was no vulnerability, only an observation: inventory-related functionality was publicly reachable and responding to anonymous requests.</p>
+
+<p>Further inspection revealed an endpoint that accepted a small integer identifier and returned information relating to individual SIM records. The identifiers appeared sequential and responses differed between records, indicating the endpoint was performing lookups against live inventory rather than returning static content.</p>
+
+<p>This suggested a possible authorization issue and became the primary hypothesis for testing.</p>
+</section>
+
+<section>
+<h2 id="s3">Confirming the Exposure</h2>
+<p>The inventory endpoint returned SIM-related information, including identifiers associated with provisioned subscriptions.</p>
+
+<p>A separate endpoint accepted one of these identifiers and returned a PNG image. Initially the response appeared unremarkable; however, decoding the QR code revealed a GSMA LPA activation string:</p>
+
+<p class="code-label">Plain Text</p>
+<pre><code>LPA:1$&lt;smdp-plus-host&gt;$&lt;MatchingID&gt;</code></pre>
+
+<p>This format is used during consumer eSIM provisioning and contains the information required for a device to retrieve an eSIM profile from the relevant SM-DP+ server.</p>
+
+<p>At that point the issue moved beyond simple information disclosure. The API was not exposing inventory metadata alone; it was exposing provisioning credentials tied to customer subscriptions.</p>
+
+<p>Both endpoints were accessible without authentication, allowing anonymous retrieval of activation artefacts associated with inventory records outside the attacker’s ownership.</p>
+</section>
+
+<section>
+<h2 id="s4">Impact Assessment</h2>
+<p>The strongest part of the finding was not the IDOR itself but the nature of the exposed data.</p>
+
+<p>Three factors drove the severity assessment:</p>
+
+<ul>
+<li><strong>Unauthenticated access:</strong> both endpoints were accessible without any form of authentication or authorization.</li>
+<li><strong>Enumerability:</strong> records were referenced using sequential identifiers, making large-scale discovery practical.</li>
+<li><strong>Credential exposure:</strong> the QR codes contained valid GSMA activation strings rather than passive data such as status information or identifiers.</li>
+</ul>
+
+<p>During impact validation, I specifically looked for evidence that an unactivated profile could be claimed using the exposed credentials. While I identified numerous eSIM-related records, I did not find a suitable candidate that allowed me to demonstrate profile takeover.</p>
+
+<p>As a result, I did not claim successful subscription hijacking or account compromise. Those outcomes were plausible, but they were not reproduced during testing.</p>
+
+<p>The issue was therefore reported as a High severity finding based on unauthenticated access to telecommunications subscriber data and provisioning credentials at scale, rather than on a demonstrated integrity impact.</p>
+
+<p>Testing was intentionally limited to credential retrieval. No attempt was made to redeem, activate, or install any exposed eSIM profile.</p>
+</section>
+
+<section>
+<h2 id="s5">Root Cause</h2>
+<p>Based on observed behaviour, the affected endpoints performed direct object retrieval without verifying whether the requesting party was authorized to access the returned data.</p>
+
+<p>Conceptually, the logic resembled:</p>
+
+<p class="code-label">Python</p>
+<pre><code>record = inventory.get(id)
+return render_qr(record.sim_number)</code></pre>
+
+<p>The vulnerability was not caused by predictable identifiers. Sequential keys only made enumeration easier.</p>
+
+<p>The underlying issue was the absence of object-level authorization controls.</p>
+</section>
+
+<section>
+<h2 id="s6">Remediation</h2>
+<p>The service should require authentication and enforce authorization on every inventory lookup and QR retrieval operation.</p>
+
+<p>Additional recommendations included:</p>
+
+<ul>
+<li>Validate access permissions for each requested record.</li>
+<li>Treat LPA activation strings and Matching IDs as sensitive credentials.</li>
+<li>Limit exposure of internal provisioning services through authenticated gateways.</li>
+<li>Use non-predictable identifiers as defence-in-depth rather than as a primary security control.</li>
+</ul>
+</section>
+
+<section>
+<h2 id="s7">Conclusion</h2>
+<p>This was a straightforward authorization failure on an internet-exposed inventory service. The technical vulnerability itself was an ordinary IDOR, but the exposed data significantly increased the risk.</p>
+
+<p>Anonymous users could enumerate inventory records, retrieve subscriber information, and obtain eSIM provisioning credentials that should only have been available to authorized parties. Although profile takeover was not demonstrated, the combination of unauthenticated access, large-scale enumeration, and credential disclosure was sufficient to warrant a High severity rating and immediate remediation.</p>
+</section>
+            </article>
+        </div>
+
+        <nav class="article-nav" aria-label="Article navigation">
+            <a href="/#disclosures">← All disclosures</a>
+            <a class="next" href="/work/advertiser-directory.html">Next: Every advertiser’s address →</a>
+        </nav>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">
+        <span>CN Security Consulting Pty Ltd · ABN 90 706 059 463</span>
+        <a href="/">Back to index ↑</a>
+    </div>
+</footer>
+
+</div>
+
+</body>
+</html>
